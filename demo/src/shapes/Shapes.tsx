@@ -50,7 +50,7 @@ const RigidBox = memo(() => {
   const color = useRandomColor();
   const [box, api] = useCuboid(
     {
-      position: [-4 + Math.random() * 8, 10, 0],
+      position: [-4 + Math.random() * 8, 10, -0.6],
     },
     {
       args: [0.5, 0.5, 0.5],
@@ -75,7 +75,7 @@ const RigidCylinder = memo(() => {
   const color = useRandomColor();
   const [cylinder, api] = useCylinder<Mesh>(
     {
-      position: [-4 + Math.random() * 8, 10, 0],
+      position: [-4 + Math.random() * 8, 10, -0.6],
     },
     {
       args: [0.2, 0.4],
@@ -94,7 +94,7 @@ const RigidBall = memo(() => {
   const color = useRandomColor();
   const [ball] = useBall(
     {
-      position: [-4 + Math.random() * 8, 10, 0],
+      position: [-4 + Math.random() * 8, 10, -0.6],
     },
     {
       args: [0.2],
@@ -128,7 +128,7 @@ const HullPear = () => {
 
   const [pear] = useConvexHull<Mesh>(
     {
-      position: [-4 + Math.random() * 8, 10, 0],
+      position: [-4 + Math.random() * 8, 10, -0.6],
     },
     {
       args: [g.attributes.position.array],
@@ -164,7 +164,7 @@ const MeshBoat = () => {
 
   const [boat] = useConvexHull<Mesh>(
     {
-      position: [-4 + Math.random() * 8, 10, 0],
+      position: [-4 + Math.random() * 8, 10, -0.6],
     },
     {
       args: [g.attributes.position.array],

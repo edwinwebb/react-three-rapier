@@ -43,8 +43,8 @@ export default function Plinko({ ...props }: JSX.IntrinsicElements["group"]) {
   });
 
   return (
-    <group ref={group} {...props} dispose={null} rotation={[0, -1, 0]}>
-      <group position={[0, 0, -.4]} rotation={[-.1, 0, 0]}>
+    <group ref={group} {...props} dispose={null}>
+      <group position={[0, 0, -.4]}>
       <mesh
         ref={plinko}
         geometry={nodes.plinko.geometry}
@@ -52,7 +52,6 @@ export default function Plinko({ ...props }: JSX.IntrinsicElements["group"]) {
         material-color="blue"
         castShadow
         receiveShadow
-        rotation={[0, 0, .2]}
         position={[0, 7.58, -1.06]}
       />
       </group>
@@ -61,13 +60,12 @@ export default function Plinko({ ...props }: JSX.IntrinsicElements["group"]) {
         geometry={nodes.container.geometry}
         material={materials.Material}
         castShadow
-        rotation={[0, 1, 0]}
       />
       <mesh
         ref={wall}
         geometry={nodes.wall.geometry}
         material={materials["Material.001"]}
-        position={[0, -0.39, 0.44]}
+        position={[0, -0.39, 0]}
       />
     </group>
   );
