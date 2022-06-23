@@ -14,6 +14,7 @@ import { CradleExample } from "./cradle/Cradle";
 import { Transforms } from "./transforms/Transforms";
 import { Cluster } from "./cluster/Cluster";
 import { AllShapes } from "./all-shapes/AllShapes";
+import { Car } from './car/Car';
 import {
   NavLink,
   NavLinkProps,
@@ -102,6 +103,10 @@ export const App = () => {
                   path="all-shapes"
                   element={<AllShapes setUI={setUI} />}
                 />
+                <Route
+                  path="car"
+                  element={<Car setUI={setUI} />}
+                />
               </Routes>
 
               <Floor key={location.pathname} />
@@ -125,6 +130,7 @@ export const App = () => {
           <Link to="cluster">Cluster</Link>
           <Link to="all-shapes">All Shapes</Link>
           <Link to="transforms">Inherited Transforms</Link>
+          <Link to="car">Car</Link>
         </div>
 
         <div
