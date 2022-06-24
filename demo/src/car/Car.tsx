@@ -4,35 +4,30 @@ import { Debug, RigidBody, RigidBodyApi, useRevoluteJoint } from "@react-three/r
 import { createRef, useRef } from "react";
 import { Demo } from "../App";
 
-const RevoluteJoint = ({ body, wheel, anchors }) => {
-  const joint = useRevoluteJoint(body, wheel, anchors);
+const WheelJoint = ({ body, wheel, bodyAnchor, wheelAnchor, rotationAxis }) => {
+  const joint = useRevoluteJoint(body, wheel, [bodyAnchor, wheelAnchor, rotationAxis]);
   return null;
 };
 
 export const Car: Demo = ({ setUI }) => {
-  
   const bodyRef = useRef<RigidBodyApi>(null)
-  const frontLeftRef = useRef<RigidBodyApi>(null)
-  const frontRightRef = useRef<RigidBodyApi>(null)
-  const rearLeftRef = useRef<RigidBodyApi>(null)
-  const rearRightRef = useRef<RigidBodyApi>(null)
-  const refs = useRef(
-    Array.from({ length: 4 }).map(() => createRef<RigidBodyApi>())
+  const wheelPositions = [
+    [-3, 0, 2],
+    [-3, 0, -2],
+    [3, 0, 2],
+    [3, 0, -2]
+  ]
+  const wheelRefs = useRef(
+    wheelPositions.map(() => createRef<RigidBodyApi>())
   );
     
   setUI("");
 
   useFrame(() => {
-    refs.current.forEach((ref) => {
-      //ref.current?.applyTorqueImpulse({x:0,y:0,z:.1})
+    wheelRefs.current.forEach((ref) => {
+      ref.current?.applyTorqueImpulse({x:0,y:0,z:.1})
     });
-    frontLeftRef.current?.applyTorqueImpulse({x:0,y:0,z:.1})
-    frontRightRef.current?.applyTorqueImpulse({x:0,y:0,z:.1})
-    rearLeftRef.current?.applyTorqueImpulse({x:0,y:0,z:.1})
-    rearRightRef.current?.applyTorqueImpulse({x:0,y:0,z:.1})
   });
-
-  //useRevoluteJoint(bodyRef, frontLeftRef, [[0,0,0],[0,0,0],[0,0,0]]);
 
   return ( 
     <group>
@@ -49,54 +44,32 @@ export const Car: Demo = ({ setUI }) => {
           name="chassis"
          />
       </RigidBody>
-      <RigidBody
-        position={[-3, 0, -2]}
-        colliders="hull"
-        type="dynamic"
-        ref={frontLeftRef}
-        >
-        <Cylinder 
-          rotation={[Math.PI/2, 0, 0]}
-          args={[1,1,1,32]}
+      { wheelPositions.map( (wheelPosition, index) => (
+        <RigidBody
+          position={wheelPosition}
+          colliders="hull"
+          type="dynamic"
+          key={index}
+          ref={wheelRefs.current[index]}
+          >
+          <Cylinder 
+            rotation={[Math.PI/2, 0, 0]}
+            args={[1,1,1,32]}
+            castShadow
+            receiveShadow
+          />
+        </RigidBody>
+      ))}
+      { wheelPositions.map( (wheelPosition, index) => (
+        <WheelJoint 
+          key={index}
+          body={bodyRef} 
+          wheel={wheelRefs.current[index]}  
+          bodyAnchor={wheelPosition}
+          wheelAnchor={[0,0,0]}
+          rotationAxis={[0,0,1]}
         />
-      </RigidBody>
-      <RevoluteJoint body={bodyRef} wheel={frontLeftRef}  anchors={[[-3, 0, -2], [0,0,0], [0, 0, 1]]} />
-      <RigidBody
-        position={[-3, 0, 2]}
-        colliders="hull"
-        type="dynamic"
-        ref={frontRightRef}
-        >
-        <Cylinder 
-          rotation={[Math.PI/2, 0, 0]}
-          args={[1,1,1,32]}
-        />
-      </RigidBody>
-      <RevoluteJoint body={bodyRef} wheel={frontRightRef} anchors={[[-3, 0, 2], [0,0,0], [0, 0, 1]]} />
-      <RigidBody
-        position={[3, 0, -2]}
-        colliders="hull"
-        type="dynamic"
-        ref={rearLeftRef}
-        >
-        <Cylinder 
-          rotation={[Math.PI/2, 0, 0]}
-          args={[1,1,1,32]}
-        />
-      </RigidBody>
-      <RevoluteJoint body={bodyRef} wheel={rearLeftRef}  anchors={[[3, 0, -2], [0,0,0], [0, 0, 1]]} />
-      <RigidBody
-        position={[3, 0, 2]}
-        colliders="hull"
-        type="dynamic"
-        ref={rearRightRef}
-        >
-        <Cylinder 
-          rotation={[Math.PI/2, 0, 0]}
-          args={[1,1,1,32]}
-        />
-      </RigidBody>
-      <RevoluteJoint body={bodyRef} wheel={rearRightRef} anchors={[[3, 0, 2], [0,0,0], [0, 0, 1]]} />
+      ))}
     </group>
   );
 };
